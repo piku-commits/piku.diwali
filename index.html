@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="A colourful Diwali Festival of Lights experience with animated fireworks and diyas.">
+<meta property="og:title" content="✨ Happy Diwali ✨">
+<meta property="og:description" content="Celebrate the Festival of Lights with colourful fireworks! 🪔🎆">
+<meta name="theme-color" content="#080018">
+<title>✨ Happy Diwali — Festival of Lights 🪔</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;min-height:100%;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:#05000f;color:#fff}
+body{overflow-x:hidden}
+#fireworks{position:fixed;inset:0;width:100%;height:100%;z-index:0}
+.page{position:relative;z-index:2;min-height:100vh;display:flex;flex-direction:column}
+nav{display:flex;justify-content:space-between;align-items:center;padding:22px 6%;position:relative;z-index:5}
+.logo{font-weight:800;font-size:1.25rem;color:#ffd86b;text-shadow:0 0 16px #ff6a00}
+nav a{color:#fff;text-decoration:none;margin-left:24px;font-size:.95rem;opacity:.9}
+nav a:hover{color:#ffd86b}
+.hero{min-height:78vh;display:grid;place-items:center;text-align:center;padding:40px 20px 90px}
+.hero-inner{max-width:950px}
+.kicker{display:inline-block;padding:8px 16px;border:1px solid rgba(255,216,107,.4);border-radius:999px;background:rgba(255,150,0,.08);color:#ffd86b;backdrop-filter:blur(8px);margin-bottom:22px}
+h1{font-size:clamp(3.2rem,10vw,8rem);line-height:.95;letter-spacing:-.05em;background:linear-gradient(90deg,#fff,#ffe66d,#ff8a00,#ff4fd8,#fff);background-size:300%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:shine 5s linear infinite;filter:drop-shadow(0 0 22px rgba(255,100,0,.5))}
+@keyframes shine{to{background-position:300%}}
+.hero p{font-size:clamp(1rem,2.5vw,1.35rem);color:#eee;margin:26px auto;max-width:680px;line-height:1.7}
+.buttons{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.btn{border:0;border-radius:999px;padding:14px 24px;font-weight:800;font-size:1rem;cursor:pointer;text-decoration:none;display:inline-block}
+.primary{background:linear-gradient(90deg,#ffb300,#ff5e00,#ff1493);color:#fff;box-shadow:0 0 28px rgba(255,100,0,.4)}
+.secondary{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.22);color:#fff;backdrop-filter:blur(10px)}
+section{padding:80px 6%;position:relative}
+.section-title{text-align:center;font-size:clamp(2rem,5vw,3.2rem);margin-bottom:16px}
+.section-sub{text-align:center;color:#cfc9df;max-width:680px;margin:0 auto 40px;line-height:1.7}
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;max-width:1050px;margin:auto}
+.card{padding:30px;border-radius:24px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(12px);text-align:center;box-shadow:0 15px 50px rgba(0,0,0,.2)}
+.card .icon{font-size:3rem;margin-bottom:14px}
+.card h3{margin-bottom:10px;color:#ffd86b}
+.card p{color:#cfc9df;line-height:1.6}
+.wishes{text-align:center;padding:100px 20px 120px}
+.wishes h2{font-size:clamp(2rem,6vw,4.5rem);text-shadow:0 0 30px #ff4d00}
+footer{text-align:center;padding:25px;color:#9d96ad;font-size:.9rem;border-top:1px solid rgba(255,255,255,.08)}
+.diyas{position:fixed;bottom:12px;left:0;right:0;z-index:4;display:flex;justify-content:space-between;padding:0 7%;pointer-events:none}
+.diya{width:58px;height:28px;background:linear-gradient(#ffcf4a,#e65100);border-radius:0 0 40px 40px;box-shadow:0 0 20px #ff6a00}
+.diya:before{content:"";position:absolute;width:18px;height:34px;margin-left:20px;margin-top:-27px;background:radial-gradient(circle at 50% 70%,#fff 3%,#ffe600 25%,#ff7900 58%,transparent 72%);animation:flicker .45s infinite alternate}
+@keyframes flicker{to{transform:scale(1.15) rotate(3deg)}}
+.toast{position:fixed;left:50%;bottom:70px;transform:translate(-50%,20px);background:#fff;color:#17001e;padding:12px 18px;border-radius:999px;font-weight:700;opacity:0;transition:.3s;z-index:20}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:760px){nav{padding:18px 5%}nav .links{display:none}.cards{grid-template-columns:1fr}.hero{min-height:82vh}.diyas{padding:0 3%}.diya{width:42px}.diya:before{margin-left:12px}}
+</style>
+</head>
+<body>
+<canvas id="fireworks" aria-hidden="true"></canvas>
+
+<div class="page">
+<nav>
+  <div class="logo">🪔 DIWALI</div>
+  <div class="links"><a href="#celebrate">Celebrate</a><a href="#wishes">Wishes</a></div>
+</nav>
+
+<main>
+<section class="hero">
+  <div class="hero-inner">
+    <div class="kicker">✨ Festival of Lights • 2026 ✨</div>
+    <h1>Happy Diwali</h1>
+    <p>May your home glow with happiness, your heart shine with love, and your life sparkle with countless beautiful moments.</p>
+    <div class="buttons">
+      <button class="btn primary" id="moreFireworks">🎆 More Fireworks</button>
+      <button class="btn secondary" id="shareBtn">💌 Share Diwali Wishes</button>
+    </div>
+  </div>
+</section>
+
+<section id="celebrate">
+  <h2 class="section-title">Celebrate the Festival of Lights</h2>
+  <p class="section-sub">A little sparkle, a lot of colour, and warm wishes for everyone. Let the night sky light up!</p>
+  <div class="cards">
+    <article class="card"><div class="icon">🎆</div><h3>Colourful Skies</h3><p>Watch brilliant fireworks burst across the night with glowing trails and vibrant colours.</p></article>
+    <article class="card"><div class="icon">🪔</div><h3>Bright Diyas</h3><p>May every little light bring peace, positivity, prosperity and joy into your home.</p></article>
+    <article class="card"><div class="icon">✨</div><h3>Beautiful Moments</h3><p>Celebrate togetherness, share smiles and create memories that shine all year long.</p></article>
+  </div>
+</section>
+
+<section class="wishes" id="wishes">
+  <h2>Wishing You Love, Light & Happiness! 🪔</h2>
+  <p class="section-sub">Have a safe, joyful and sparkling Diwali. 🎇</p>
+</section>
+</main>
+
+<footer>Made with ❤️ & ✨ for Diwali</footer>
+</div>
+
+<div class="diyas"><div class="diya"></div><div class="diya"></div><div class="diya"></div><div class="diya"></div></div>
+<div class="toast" id="toast">Diwali wishes copied! 🪔✨</div>
+
+<script>
+const canvas=document.getElementById("fireworks"),ctx=canvas.getContext("2d");
+let W,H,rockets=[],particles=[];
+const colors=["#ff1744","#ff6d00","#ffd600","#00e5ff","#2979ff","#d500f9","#ff4fd8","#ffffff"];
+function resize(){W=canvas.width=innerWidth;H=canvas.height=innerHeight}
+addEventListener("resize",resize);resize();
+
+class Rocket{
+ constructor(x=Math.random()*W){this.x=x;this.y=H+15;this.ty=80+Math.random()*H*.48;this.v=7+Math.random()*3;this.c=colors[Math.floor(Math.random()*colors.length)];this.tr=[]}
+ update(){this.tr.push({x:this.x,y:this.y});if(this.tr.length>8)this.tr.shift();this.y-=this.v;if(this.y<=this.ty){explode(this.x,this.y,this.c);return true}}
+ draw(){ctx.beginPath();this.tr.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y));ctx.strokeStyle=this.c;ctx.lineWidth=2;ctx.shadowBlur=15;ctx.shadowColor=this.c;ctx.stroke();ctx.beginPath();ctx.arc(this.x,this.y,3,0,7);ctx.fillStyle="#fff";ctx.fill()}
+}
+class Particle{
+ constructor(x,y,c){let a=Math.random()*Math.PI*2,s=2+Math.random()*7;this.x=x;this.y=y;this.vx=Math.cos(a)*s;this.vy=Math.sin(a)*s;this.c=c;this.life=1;this.d=.009+Math.random()*.014;this.r=1+Math.random()*2.5}
+ update(){this.x+=this.vx;this.y+=this.vy;this.vx*=.985;this.vy=this.vy*.985+.045;this.life-=this.d}
+ draw(){ctx.globalAlpha=Math.max(this.life,0);ctx.beginPath();ctx.arc(this.x,this.y,this.r,0,7);ctx.fillStyle=this.c;ctx.shadowBlur=15;ctx.shadowColor=this.c;ctx.fill();ctx.globalAlpha=1}
+}
+function explode(x,y,c){for(let i=0;i<120+Math.random()*80;i++)particles.push(new Particle(x,y,c))}
+function launch(x){rockets.push(new Rocket(x))}
+function loop(){
+ requestAnimationFrame(loop);
+ ctx.fillStyle="rgba(5,0,15,.18)";ctx.fillRect(0,0,W,H);
+ for(let i=0;i<3;i++){ctx.fillStyle="rgba(255,255,255,.7)";ctx.fillRect(Math.random()*W,Math.random()*H*.7,1.5,1.5)}
+ for(let i=rockets.length-1;i>=0;i--){if(rockets[i].update())rockets.splice(i,1);else rockets[i].draw()}
+ for(let i=particles.length-1;i>=0;i--){particles[i].update();particles[i].draw();if(particles[i].life<=0)particles.splice(i,1)}
+ if(Math.random()<.035)launch();
+}
+for(let i=0;i<7;i++)setTimeout(()=>launch(Math.random()*W),i*500);
+loop();
+
+document.getElementById("moreFireworks").onclick=()=>{for(let i=0;i<12;i++)setTimeout(()=>launch(Math.random()*W),i*180)}
+document.getElementById("shareBtn").onclick=async()=>{
+ const text="✨ Happy Diwali! 🪔 May your life shine bright with happiness, love and prosperity. 🎆";
+ try{await navigator.clipboard.writeText(text);showToast("Diwali wishes copied! 🪔✨")}
+ catch(e){showToast("Happy Diwali! 🪔✨")}
+};
+function showToast(t){const el=document.getElementById("toast");el.textContent=t;el.classList.add("show");setTimeout(()=>el.classList.remove("show"),2200)}
+</script>
+</body>
+</html>
